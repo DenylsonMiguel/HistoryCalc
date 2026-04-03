@@ -46,4 +46,4 @@ npm run dev
 
 Método Endpoint Descrição
 
-GET / Retorna todos os cálculos
+GET / Mensagem padrão da api1
