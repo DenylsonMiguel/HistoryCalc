@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import "dotenv/config";
-// APP
+
 const app = express();
 
 // MIDDLEWARES
@@ -14,6 +14,16 @@ app.use(morgan("combined"));
 // ROUTES
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: "Welcome to History Calc" });
+});
+
+// POS-MIDDLEWARES
+app.use((req: Request, res: Response) => {
+    res.status(404).json({
+        error: "Invalid route",
+    code: "NOT_FOUND",
+    method: req.method,
+    path: req.originalUrl
+    });
 });
 
 // START
