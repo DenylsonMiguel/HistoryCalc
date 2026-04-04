@@ -15,7 +15,7 @@ const createCalcSchema = z.object({
         .trim()
         .min(1, "Invalid result")
         .max(20, "Result is too long")
-        .regex(/^[0-9+\-*/().\s]+$/, "Invalid operation"),
+        .regex(/^[0-9+\-*/().\s]+$/, "Invalid operation")
 });
 
 const service = new Service();
@@ -43,11 +43,24 @@ class Controller {
             code: result.code
         });
     };
+
+    getAll = async (req: Request, res: Response) => {
+        const result = await service.getAll();
+        if (result.error)
+            return res
+                .status(result.status)
+                .json({ error: result.error, code: result.code });
+        return res.status(result.status).json({
+            data: result.data,
+            code: result.code
+        });
+    };
 }
 const controller = new Controller();
 
 const calcRoutes = Router();
 
 calcRoutes.post("", controller.create);
+calcRoutes.get("", controller.getAll);
 
 export default calcRoutes;
