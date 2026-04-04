@@ -32,6 +32,7 @@ npm install
 
 ```
 PORT=<port>
+DB_URI='<db_uri>'
 ```
 
 - Rode em desenvolvimento:
@@ -46,4 +47,14 @@ npm run dev
 
 Método Endpoint Descrição
 
-GET / Mensagem padrão da api1
+GET / Mensagem inicial api
+POST /calcs Cria um calculo
+
+### Exemplo POST /calcs
+
+```json
+{
+    "operation": "1+1",
+    "result": "2"
+}
+```
