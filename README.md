@@ -49,6 +49,8 @@ Método Endpoint Descrição
 
 GET / Mensagem inicial api
 POST /calcs Cria um calculo
+GET /calcs Retorna todos os calculos
+GET /calcs/:id Retorna um calculo específico pelo id
 
 ### Exemplo POST /calcs
 
