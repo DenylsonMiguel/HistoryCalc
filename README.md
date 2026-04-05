@@ -1,128 +1,125 @@
-# HiatoryCalc
+# HistoryCalc
 
-## ! IMPORTANTE !
+A REST API for a calculator that stores calculation history, built with Node.js, TypeScript, MongoDB, and Mongoose.
 
-**A api já está publica e podendo ser utilizada, para acessá-la vá em:**
-https://historycalc.onrender.com
-
----
-
-API de uma calculadora que salva o histórico de cálculos usando Node.js, TypeScript e MongoDB Atlas.
-
+![GitHub stars](https://img.shields.io/github/stars/DenylsonMiguel/HistoryCalc?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/DenylsonMiguel/HistoryCalc?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/DenylsonMiguel/HistoryCalc?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/DenylsonMiguel/HistoryCalc?style=for-the-badge)
+![GitHub license](https://img.shields.io/github/license/DenylsonMiguel/HistoryCalc?style=for-the-badge)
 
 ---
 
-## Tecnologias
+## Overview
 
+**HistoryCalc allows you to save, retrieve, and delete calculations through a simple API. It was designed as a backend practice project focused on TypeScript, MongoDB integration, and clean API structure.**
+
+
+---
+
+## Tech Stack
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-
-
----
-
-## Estrutura do Projeto
-
-```
-.
-├── controllers
-│   └── calcController.ts
-├── db.ts
-├── models
-│   └── calcModels.ts
-├── routes
-│   └── calc.ts
-├── server.ts
-└── services
-    └── calcService.ts
-```
-
+[![Mongoose](https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white)](https://mongoosejs.com/)
 
 ---
 
-## Funcionalidades
+## Features
 
-Criar um cálculo (POST /calc)
+- Create and store calculations
 
-Listar histórico de cálculos (GET /calc)
+- Retrieve the complete calculation history
 
-Buscar cálculo específico pelo ID (GET /calc/:id)
+- Retrieve a specific calculation by ID
 
-Remover um cálculo especifico pelo ID (REMOVE /calc/:id)
+- Delete calculations by ID
 
+- JSON error handling middleware
 
+- MongoDB integration with Mongoose
 
 ---
 
-## Setup
+## Installation
 
-- Clone o repositório:
-
+### Clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/DenylsonMiguel/HistoryCalc.git
-```
-
-- Instale dependências:
-
-
-```bash
+cd HistoryCalc
 npm install
 ```
 
-- Crie o arquivo .env na raiz do projeto com:
+---
 
+### Environment Variables
 
+Create a .env file in the root directory:
+
+```env
+PORT=<your_port>
+DB_URI=<your_mongodb_connection_string>
 ```
-MONGO_URI=your_mongodb_uri
-PORT=3000
-```
 
-- Rode em desenvolvimento:
+---
 
+## Running the Project
+
+### Start the development server:
 
 ```bash
 npm run dev
 ```
 
-[WARN] Não está funcionando!
+---
 
-- Build para produção:
+## API Endpoints
 
-
-```bash
-npm run build
-npm start
-```
-
+| Method | Endpoint      | Description                               |
+|--------|---------------|-------------------------------------------|
+| GET    | `/`           | Returns the API welcome message           |
+| POST   | `/calcs`      | Creates a new calculation                 |
+| GET    | `/calcs`      | Returns all saved calculations            |
+| GET    | `/calcs/:id`  | Returns a specific calculation by ID      |
+| DELETE | `/calcs/:id`  | Deletes a specific calculation by ID      |
 
 ---
 
-## Endpoints
-
-Método	Endpoint	Descrição
-
-GET	/calc	Retorna todos os cálculos
-GET	/calc/:id	Retorna cálculo pelo ID
-POST	/calc	Cria um novo cálculo
-DELETE /calc/:id Deleta um cálculo pelo ID
-
-
-### Exemplo POST /calc:
-
+### Example Request
 ```json
+POST /calcs
+
 {
-  "operation": "2 + 2",
-  "result": 4
+  "operation": "1+1",
+  "result": "2"
 }
 ```
 
+### Example Response
+
+```json
+{
+  "id": "67f31f8c3b17d52b9a5d2b21",
+  "operation": "1+1",
+  "result": "2"
+}
+```
 
 ---
 
-## Variáveis de Ambiente
+## Future Improvements
 
-MONGO_URI → String de conexão do MongoDB Atlas
+- Unit and integration tests
 
-PORT → Porta do servidor (default 3000)
+- Docker support
+
+- API documentation with Swagger
+
+---
+
+## License
+
+**This project is licensed under the MIT License.**
