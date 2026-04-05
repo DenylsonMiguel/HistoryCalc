@@ -2,7 +2,8 @@ import express from "express";
 import type { Request, Response } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
-import calcRoutes from "./calcs.controller.js";
+import cors from "cors";
+import calcRoutes from "./modules/calcs/calcs.controller.js";
 import { jsonErrorHandler } from "./middlewares/jsonError.js";
 import "dotenv/config";
 import "./config/db.js";
@@ -13,6 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(jsonErrorHandler);
 app.use(helmet());
+app.use(
+    cors({
+        origin: "*",
+        optionsSuccessStatus: 200,
+    })
+);
 app.use(morgan("combined"));
 
 // ROUTES

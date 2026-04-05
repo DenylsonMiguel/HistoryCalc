@@ -77,14 +77,50 @@ export class Service {
                 result: calc.result,
                 id: calc._id
             };
-            
+
             return {
                 status: 200,
                 data: publicCalc,
                 code: "SUCCES"
-            }
+            };
         } catch (err) {
             console.error(`[ERROR] - Error on GET /calcs/:id ${err}`);
+            return {
+                status: 500,
+                error: "Internal Server Error",
+                code: "SERVER_ERROR"
+            };
+        }
+    }
+
+    async delete(data: { id: string }): Promise<{
+        status: number;
+        data?: object;
+        error?: string;
+        code: string;
+    }> {
+        try {
+            const calc = await Calc.findByIdAndDelete(data.id);
+            if (!calc)
+                return {
+                    status: 404,
+                    error: "Calc Not Found",
+                    code: "NOT_FOUND"
+                };
+            
+            const publicCalc = {
+                operation: calc.operation,
+                result: calc.result,
+                id: calc._id
+            };
+
+            return {
+                status: 200,
+                data: publicCalc,
+                code: "SUCCES"
+            };
+        } catch (err) {
+            console.error(`[ERROR] - Error on DELETE /calcs/:id ${err}`);
             return {
                 status: 500,
                 error: "Internal Server Error",
