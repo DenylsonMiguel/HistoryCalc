@@ -9,3 +9,9 @@ const calcSchema = new mongoose.Schema<ICalc>({
     result: { type: String, required: true }
 });
 export const Calc = mongoose.model<ICalc>("Calc", calcSchema);
+
+export type PublicCalc = {
+    operation: string;
+    result: string;
+    id: string;
+}
