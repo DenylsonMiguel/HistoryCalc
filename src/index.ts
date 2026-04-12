@@ -1,10 +1,11 @@
 import express from "express";
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
 import calcRoutes from "./modules/calcs/calcs.controller.js";
 import { jsonErrorHandler } from "./middlewares/jsonError.js";
+import { AppError } from "./middlewares/errorHandler.js";
 import "dotenv/config";
 import "./config/db.js";
 
@@ -17,7 +18,7 @@ app.use(helmet());
 app.use(
     cors({
         origin: "*",
-        optionsSuccessStatus: 200,
+        optionsSuccessStatus: 200
     })
 );
 app.use(morgan("combined"));
@@ -35,6 +36,14 @@ app.use((req: Request, res: Response) => {
         code: "NOT_FOUND",
         method: req.method,
         path: req.originalUrl
+    });
+});
+
+app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
+    res.status(err.status || 500).json({
+        error: err.message,
+        code: err.code || "INTERNAL_ERROR",
+        errors: err.errors ?? []
     });
 });
 

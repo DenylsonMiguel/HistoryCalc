@@ -1,6 +1,9 @@
 import { Service } from "./calcs.service.js";
 import { Router } from "express";
 import type { Request, Response } from "express";
+import { AppError } from "../../middlewares/errorHandler.js";
+import { parse } from "../../utils/parse.js";
+import { respond } from "../../utils/respond.js";
 import * as z from "zod";
 
 const createCalcSchema = z.object({
@@ -15,7 +18,7 @@ const createCalcSchema = z.object({
         .trim()
         .min(1, "Invalid result")
         .max(20, "Result is too long")
-        .regex(/^[0-9+\-*/().\s]+$/, "Invalid operation")
+        .regex(/^[0-9+\-*/().\s]+$/, "Invalid result")
 });
 const idSchema = z.object({
     id: z
@@ -24,99 +27,44 @@ const idSchema = z.object({
         .regex(/^[a-fA-F0-9]{24}$/, "Invalid id")
 });
 
-const service = new Service();
 class Controller {
+    constructor(private service: Service) {}
+
     create = async (req: Request, res: Response) => {
-        const parsed = createCalcSchema.safeParse(req.body);
+        const data = parse(createCalcSchema, req.body);
 
-        if (!parsed.success)
-            return res.status(400).json({
-                errors: parsed.error.issues.map(issue => ({
-                    field: issue.path[0] ?? "unknown",
-                    message: issue.message
-                })),
-                code: "BAD_REQUEST"
-            });
-
-        const result = await service.create(parsed.data);
-
-        if (result.error)
-            return res
-                .status(result.status)
-                .json({ error: result.error, code: result.code });
-        return res.status(result.status).json({
-            data: result.data,
-            code: result.code
-        });
+        const result = await this.service.create(data);
+        respond(result, res);
     };
 
     getAll = async (req: Request, res: Response) => {
-        const result = await service.getAll();
-        if (result.error)
-            return res
-                .status(result.status)
-                .json({ error: result.error, code: result.code });
-        return res.status(result.status).json({
-            data: result.data,
-            code: result.code
-        });
+        const result = await this.service.getAll();
+        respond(result, res);
     };
 
     getById = async (req: Request, res: Response) => {
-        const parsed = idSchema.safeParse(req.params);
+        const data = parse(idSchema, req.params);
 
-        if (!parsed.success)
-            return res.status(400).json({
-                errors: parsed.error.issues.map(issue => ({
-                    field: issue.path[0] ?? "unknown",
-                    message: issue.message
-                })),
-                code: "BAD_REQUEST"
-            });
-
-        const result = await service.getById(parsed.data);
-
-        if (result.error)
-            return res
-                .status(result.status)
-                .json({ error: result.error, code: result.code });
-        return res.status(result.status).json({
-            data: result.data,
-            code: result.code
-        });
+        const result = await this.service.getById(data);
+        respond(result, res);
     };
 
     delete = async (req: Request, res: Response) => {
-        const parsed = idSchema.safeParse(req.params);
+        const data = parse(idSchema, req.params);
 
-        if (!parsed.success)
-            return res.status(400).json({
-                errors: parsed.error.issues.map(issue => ({
-                    field: issue.path[0] ?? "unknown",
-                    message: issue.message
-                })),
-                code: "BAD_REQUEST"
-            });
-
-        const result = await service.delete(parsed.data);
-
-        if (result.error)
-            return res
-                .status(result.status)
-                .json({ error: result.error, code: result.code });
-        return res.status(result.status).json({
-            data: result.data,
-            code: result.code
-        });
+        const result = await this.service.delete(data);
+        respond(result, res);
     };
 }
-const controller = new Controller();
+
+const service = new Service();
+const controller = new Controller(service);
 
 const calcRoutes = Router();
 
 calcRoutes.post("", controller.create);
 calcRoutes.get("", controller.getAll);
 calcRoutes.get("/:id", controller.getById);
-calcRoutes.delete("/:id", controller.delete)
+calcRoutes.delete("/:id", controller.delete);
 
 export default calcRoutes;
